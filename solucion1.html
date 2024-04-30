@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+
+<body>
+  <table>
+    <thead>
+      <tr>
+        <th>Last Name</th>
+        <th>Name</th>
+      </tr>
+    </thead>
+    <tbody id="tbody1"></tbody>
+  </table>
+  <button id="getData" type="button">  GET LIST </button>
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.11.1/firebase-app.js";
+    import { getDatabase, ref, get, child } from "https://www.gstatic.com/firebasejs/10.11.1/firebase-database.js";
+
+    const firebaseConfig = {
+      apiKey: "AIzaSyDVAYxj2skwkCvvTmNYwQfFAJpKLEGlHWA",
+      authDomain: "test-app3-f9874.firebaseapp.com",
+      databaseURL: "https://test-app3-f9874.firebaseio.com",
+      projectId: "test-app3-f9874",
+      storageBucket: "test-app3-f9874.appspot.com",
+      messagingSenderId: "327126614176",
+      appId: "1:327126614176:web:f1c8b4d38c3d479fb7c9c5"
+    }
+    //firebase.initializeApp(firebaseConfig)
+    const app = initializeApp(firebaseConfig)
+    //Get database
+    
+    const db = getDatabase()
+    const button = document.getElementById('getData')
+    button.addEventListener('click', function() {
+      const dbRef = ref(db)
+      get(child(dbRef, 'users')).then((users) => {
+        users.forEach(user => {
+          AddUsersToTable(user)
+        });
+      })
+    })
+    function AddUsersToTable(user) {
+      let key = user.key
+      let value = user.val()
+      let tbody = document.getElementById('tbody1')
+      let trow = document.createElement('tr')
+      let td1 = document.createElement('td')
+      let td2 = document.createElement('td')
+      td1.innerHTML = value.lastName
+      td2.innerHTML = value.name
+      trow.appendChild(td1)
+      trow.appendChild(td2)
+      tbody.appendChild(trow)
+    }
+  </script>
+  <script src="script.js"></script>
+</body>
+</html>
